@@ -1,7 +1,6 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
-import { contextPlugin } from "@sanity/context/studio";
 import { schemaTypes } from "./src/sanity/schemaTypes";
 export default defineConfig({
   name: "homematch",
@@ -15,10 +14,6 @@ export default defineConfig({
     process.env.SANITY_STUDIO_DATASET ||
     "production",
   basePath: "/studio",
-  plugins: [
-    structureTool(),
-    visionTool(),
-    contextPlugin({ insights: { enabled: false } }),
-  ],
+  plugins: [structureTool(), visionTool()],
   schema: { types: schemaTypes },
 });

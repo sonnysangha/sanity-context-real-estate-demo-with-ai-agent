@@ -13,9 +13,11 @@ const url = new URL(need("SANITY_CONTEXT_MCP_URL"));
 url.searchParams.set("groqFilter", contextScope);
 url.searchParams.set("perspective", "published");
 url.searchParams.set("embeddings", "true");
-const token = url.pathname.includes("/organizations/")
-  ? need("SANITY_ORGANIZATION_TOKEN")
-  : need("SANITY_API_READ_TOKEN");
+if (!url.pathname.includes("/context/organizations/"))
+  throw new Error(
+    "Copy the organization Context endpoint from Dashboard; the legacy dataset endpoint is deprecated.",
+  );
+const token = need("SANITY_ORGANIZATION_TOKEN");
 const client = await createMCPClient({
   transport: {
     type: "http",

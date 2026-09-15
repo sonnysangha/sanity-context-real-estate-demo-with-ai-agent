@@ -1,3 +1,5 @@
+import { after } from "next/server";
+import { recordInsights, type InsightsExchange } from "@/lib/insights";
 import { visibleToolInput } from "@/lib/tool-activity";
 import { queryFilters } from "@/lib/query-filters";
 import {
@@ -29,7 +31,7 @@ const requestSchema = z.object({
     )
     .min(1)
     .max(40),
-  threadId: z.string().max(100),
+  threadId: z.string().min(1).max(100),
 });
 export async function POST(req: Request) {
   if (Number(req.headers.get("content-length") || 0) > 100000)
@@ -56,9 +58,7 @@ export async function POST(req: Request) {
       { status: 400 },
     );
   const endpoint = process.env.SANITY_CONTEXT_MCP_URL;
-  const token = endpoint?.includes("/context/organizations/")
-    ? process.env.SANITY_ORGANIZATION_TOKEN
-    : process.env.SANITY_API_READ_TOKEN;
+  const token = process.env.SANITY_ORGANIZATION_TOKEN;
   if (
     !endpoint ||
     !token ||
@@ -82,7 +82,13 @@ export async function POST(req: Request) {
       { status: 503 },
     );
   }
-  if (url.protocol !== "https:" || url.hostname !== "api.sanity.io")
+  if (
+    url.protocol !== "https:" ||
+    url.hostname !== "api.sanity.io" ||
+    !/^\/v(?:1|\d{4}-\d{2}-\d{2})\/context\/organizations\/[^/]+\/mcp\/[^/]+\/?$/.test(
+      url.pathname,
+    )
+  )
     return Response.json(
       {
         error: "The Context endpoint URL is not valid. Check the setup guide.",
@@ -94,6 +100,10 @@ export async function POST(req: Request) {
   url.searchParams.set("embeddings", "true");
   const abort = new AbortController();
   req.signal.addEventListener("abort", () => abort.abort(), { once: true });
+  let completedExchange: InsightsExchange | undefined;
+  after(async () => {
+    if (completedExchange) await recordInsights(completedExchange);
+  });
   const encoder = new TextEncoder();
   const stream = new ReadableStream({
     async start(controller) {
@@ -269,13 +279,27 @@ export async function POST(req: Request) {
           maxOutputTokens: 2400,
           abortSignal: abort.signal,
         });
+        let answer = "";
         for await (const event of result.fullStream) {
-          if (event.type === "text-delta")
+          if (event.type === "text-delta") {
+            answer += event.text;
             send({ type: "text", text: event.text });
+          }
           if (event.type === "error") throw event.error;
         }
         if (queryAttempted && !validResults)
           throw new Error("No valid listing results returned");
+        completedExchange = {
+          threadId: body.data.threadId,
+          endpoint: url.toString(),
+          messages: [
+            ...body.data.messages,
+            { role: "assistant", content: answer },
+          ],
+          modelId: model.modelId,
+          modelProvider: model.provider,
+          usage: await result.totalUsage,
+        };
         send({ type: "done" });
       } catch (error) {
         if (!abort.signal.aborted) {

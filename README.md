@@ -10,16 +10,64 @@ This is my link, and I appreciate you using it — it allows me to continue maki
 
 All apartments, prices, dates, descriptions, and images are fictional tutorial content. There is no booking, application, contact, or payment flow.
 
+## Recommended: set up with your coding agent
+
+This is the route used in the tutorial. Give your coding agent Sanity’s official skills, then use the setup prompt supplied by Sanity Dashboard. The [manual setup](#setup) below is an alternative and a reference if you get stuck.
+
+### 1. Open the starter and install the skills
+
+1. Install **Node.js 22.18 or newer**, a code editor with a coding agent (such as Codex, Claude Code, or Cursor), and **pnpm 11**. If pnpm is missing, run `npm install -g pnpm@11.24.0` in your terminal once.
+2. On [GitHub](https://github.com/sonnysangha/sanity-context-real-estate-demo-with-ai-agent), select **tutorial/starter → Code → Download ZIP**. Unzip it and open the folder containing `package.json` in your editor. Prefer Git? Use the [clone instructions](#1-clone-the-repository) instead.
+3. Open your editor’s terminal and run `pnpm install --frozen-lockfile`.
+4. Install the official Sanity skills, one command at a time. Select your coding agent when the installer asks:
+
+```sh
+pnpm dlx skills add sanity-io/agent-toolkit
+pnpm dlx skills add sanity-io/agent-context
+```
+
+The **Agent Toolkit** teaches your assistant Sanity development practices. The **Context skills** help it connect and shape a custom agent. These are instructions for your coding assistant; they are not extra tools exposed to the apartment finder. [Official Sanity skills guide](https://www.sanity.io/docs/ai/skills)
+
+The starter supplies the design, filters, listing details, images, seed data, schemas, and supporting code. **You build the agent connection in `src/app/api/chat/route.ts`.** Its placeholder response is expected until that step is done. Choose `main` if you want the completed agent instead.
+
+### 2. Ask your coding agent to prepare Sanity
+
+[Create your Sanity account](https://www.sanity.io/sonny), then paste this into your coding agent with the repository open:
+
+> Use the installed Sanity skills to prepare this HomeMatch NYC project. Read the README and the current Sanity Context migration guide first. Help me create my Sanity project and private production dataset, copy .env.example to .env.local if needed, configure project tokens securely, seed the supplied apartments, deploy the schema, enable Dataset Embeddings over title, description and features, and make /studio work with credentialed localhost:3000 CORS access. Keep existing content and the interface. Guide me through sign-in and API keys without printing secrets. Stop before connecting the chat agent: I will copy its setup prompt from Sanity Dashboard. Do not set up Insights yet.
+
+Your assistant can use the Sanity CLI and, if connected, the separate [Sanity MCP server](https://www.sanity.io/docs/ai). Follow its sign-in prompts. Skills do not grant account access automatically. If it cannot create a resource, use the matching [manual step below](#setup).
+
+### 3. Copy the endpoint’s setup prompt
+
+1. In **Sanity Dashboard → your organization → Context**, create your **HomeMatch NYC** MCP endpoint. Select **Dataset → your HomeMatch project → production**. Use the [content filter and instructions below](#5-create-the-context-mcp-in-sanity-dashboard), then save.
+2. Click **Connect agent** next to the endpoint URL.
+3. Select **Set up with AI**.
+4. Click **Copy setup prompt**.
+5. Paste it into your coding agent, with this extra instruction:
+
+> Connect this endpoint to the existing HomeMatch NYC app. On tutorial/starter, implement the placeholder chat route; on main, configure the existing route. Preserve the newline-delimited JSON events, real tool-call widgets, filtering behavior, and UI. Use the organization Context endpoint and an organization Context Viewer token. Keep credentials server-side. Help me add my model API key privately. Verify an actual search returns Foundry Loft 2B, Northlight Residence 4A, and The Workshop 3C. Leave Agent Insights unconfigured for now.
+
+The Dashboard prompt supplies the connection instructions for your endpoint. Let the assistant inspect the existing project and explain its changes before you run the demo. Do not replace the supplied UI with a different starter application.
+
+### 4. Check the result
+
+Run `pnpm dev`, open [the app](http://localhost:3000), and send the [first demo search](#2-find-the-three-exact-matches). Open [Studio](http://localhost:3000/studio) and confirm the apartments are editable. Your assistant should also run `pnpm context:verify`, `pnpm typecheck`, and `pnpm test`.
+
+Once searching works, follow [the demo walkthrough](#demo-walkthrough). Add [Agent Insights](#add-agent-insights) as a separate step when you reach it in the tutorial.
+
+> **Migrating an older setup?** Create the endpoint in the organization’s Context app, use its new URL and an organization Context Viewer token, and remove the deprecated Studio Context plugin/configuration document after verifying the new connection. Do not create a `sanity.agentContext` document for this tutorial. Older skill text may still show that workflow; follow the [current migration guide](https://www.sanity.io/docs/ai/context-migration-guide).
+
 ## Start here
 
-| Your goal                        | Where to go                                                                                           |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| Run the finished app             | [Setup](#setup) on the `main` branch                                                                  |
+| Your goal                        | Where to go                                                                                              |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Run the finished app             | [Setup](#setup) on the `main` branch                                                                     |
 | Build the agent yourself         | Complete setup on `tutorial/starter`, then [implement the agent](#build-the-agent-on-the-starter-branch) |
-| Follow the full demonstration    | [Demo walkthrough](#demo-walkthrough)                                                                 |
-| Understand the retrieval         | [Filters, keywords, and meaning](#filters-keywords-and-meaning)                                       |
-| Understand the UI and tool calls | [What happens when you search](#what-happens-when-you-search)                                         |
-| Fix setup or unexpected results  | [Troubleshooting](#troubleshooting)                                                                   |
+| Follow the full demonstration    | [Demo walkthrough](#demo-walkthrough)                                                                    |
+| Understand the retrieval         | [Filters, keywords, and meaning](#filters-keywords-and-meaning)                                          |
+| Understand the UI and tool calls | [What happens when you search](#what-happens-when-you-search)                                            |
+| Fix setup or unexpected results  | [Troubleshooting](#troubleshooting)                                                                      |
 
 ## What you are building
 
@@ -56,6 +104,8 @@ Sanity Context retrieval uses ordinary API usage rather than a per-token retriev
 Semantic queries have their own quota: current Dataset Embeddings documentation says generation and updates are included, while calls using `text::semanticSimilarity()` count against your organization’s semantic search quota. Check your account’s allowances and [current Sanity pricing](https://www.sanity.io/pricing) before running repeated searches. [Dataset Embeddings billing](https://www.sanity.io/docs/content-lake/dataset-embeddings)
 
 ## Setup
+
+**Manual alternative:** follow these steps if you prefer to configure the project yourself. If you used the coding-agent route above, use this section only to check individual settings; do not create duplicate projects or tokens.
 
 Run commands from the repository root. Replace placeholders with values from your own Sanity project and organization.
 
@@ -128,7 +178,13 @@ pnpm exec sanity deploy --url your-unique-homematch-name --yes --schema-required
 
 Choose a unique Studio hostname. Open the returned Studio URL, sign in, and confirm the Apartment and Neighbourhood documents appear.
 
-The project also provides an embedded Studio at `http://localhost:3000/studio` once Next.js is running. You can run a separate local Studio with `pnpm studio`.
+The project also provides an embedded Studio at `http://localhost:3000/studio` once Next.js is running. In your project’s **API → CORS origins**, add **http://localhost:3000** and enable **Allow credentials**, then sign in to Studio. This lets the editor authenticate from your local app. Alternatively, run:
+
+```sh
+pnpm exec sanity cors add http://localhost:3000 --credentials
+```
+
+You can run a separate local Studio with `pnpm studio`; that uses port 3333 and needs its own allowed origin.
 
 After changing the schema, run:
 
@@ -145,7 +201,7 @@ Redeploy Studio when you want its hosted editing interface to reflect schema/UI 
 3. Create an MCP. Give it a title such as **HomeMatch NYC** and a stable name such as `homematch-nyc`.
 4. Add a **dataset source**: `YOUR_PROJECT_ID.production`.
 5. Add the content filter below and paste the instructions beneath it.
-6. Save and copy the endpoint URL shown by Context.
+6. Save. For the recommended approach, click **Connect agent → Set up with AI → Copy setup prompt**, then [paste it into your coding agent](#3-copy-the-endpoints-setup-prompt). For manual setup, copy the endpoint URL and continue below.
 
 The dataset source selects GROQ mode; there is no separate required mode field to set. The endpoint name becomes part of its URL. [MCP configuration reference](https://www.sanity.io/docs/ai/sanity-context-mcp)
 
@@ -276,18 +332,6 @@ git restore --source=origin/main -- src/app/api/chat/route.ts
 ```
 
 Then run `pnpm typecheck`, `pnpm test`, and the live suggestions check described below.
-
-### Optional: use Sanity’s coding-agent skills
-
-```sh
-npx skills add sanity-io/context --all
-```
-
-Ask your coding assistant:
-
-> Use the create-agent-with-sanity-context skill to help me implement this repository’s starter chat route. Keep its existing UI event contract and use the organization MCP endpoint configured in my environment.
-
-The skill can interview you and help build a custom agent. Use the current Dashboard setup above if an older installed skill describes a Studio configuration document or project/dataset endpoint. [Sanity’s skill quick start](https://www.sanity.io/context)
 
 ## Demo walkthrough
 
@@ -546,6 +590,36 @@ Live reports are saved locally in the ignored `.runtime/` directory. The determi
 
 All writes use the local Editor token, outside Sanity Context. These scripts do not clear browser saved homes or unpublished Studio drafts. Avoid a fixture reset if you want to keep your edits; publish or discard Studio drafts separately.
 
+## Add Agent Insights
+
+Complete a working apartment search first. On `tutorial/starter`, add Insights while implementing your agent. On `main`, the finished integration is in [src/lib/insights.ts](src/lib/insights.ts) and the chat route; storage is **off by default** until you enable it in your own environment.
+
+For the finished branch, set `SANITY_INSIGHTS_ENABLED=true` in `.env.local`, keep the organization Context token configured, then restart `pnpm dev`. `SANITY_ORGANIZATION_ID` can be supplied explicitly or derived from the endpoint URL. `INSIGHTS_MODEL` optionally changes the analysis model; by default it uses `gpt-5.4` for OpenAI or `claude-haiku-4-5` for Anthropic.
+
+### Copy the setup snippet from Dashboard
+
+1. Open **Sanity Dashboard → your organization → Context**.
+2. Select **Insights** in the left sidebar.
+3. Click **Set up insights** at the top right.
+4. In the dialog, expand **connect the agent and the Sanity client** if you want to see the complete example.
+5. Click **Copy code** in the code panel.
+6. Paste the copied snippet into your coding agent with this instruction:
+
+> Add Sanity Context Insights to this existing HomeMatch NYC agent using the Dashboard snippet and current migration guide. Inspect our installed AI SDK and Sanity package versions first and use a compatible supported integration. Keep the existing chat stream, real MCP tools, and UI. Use our organization Context client and attribute conversations to our configured MCP URL. Reuse a stable thread ID across follow-ups, send the conversation after each exchange, and start a new ID for a new chat. Store credentials only on the server and do not log them. Ensure a telemetry failure does not break the apartment search. Explain what conversation data is stored. Use the existing helper to save and classify after each completed response through Next.js after(), or implement that behavior if working on the starter. Explain the extra model usage. Do not provision a separate scheduler for this local tutorial. Test a real conversation and a follow-up, then show me the recorded thread and analyzed results in Dashboard.
+
+### What you should see
+
+- A new real search appears in **Insights → View conversations**, associated with your endpoint.
+- A follow-up updates the same thread; **Start a new conversation** creates another thread.
+- After the classification process runs, the conversation has analysis such as a success score, sentiment, and content gaps. Saving the transcript alone does not prove classification is working; an **awaiting analysis** label means that part is still pending.
+- The chat and apartment results still work if telemetry cannot be saved.
+
+Use fictional tutorial searches while checking this. Decide what conversation data you want stored before making the app available to other people. Model-based classification has its own model usage. This demo saves the visible user/assistant transcript and runs classification after each successful exchange with Next.js `after()`. The response is delivered before that work runs. We pass the transcript directly to the classifier and attribute it to the endpoint URL. Tool payloads, system instructions, and manual-filter metadata are not included in the saved transcript.
+
+This approach needs no scheduled Sanity Function or GitHub Action. Follow-ups are serialized within the local server process to keep their saved transcripts and analysis in order. Background work is best-effort: failures are logged without exposing response bodies or secrets, and another successful exchange retries with the current transcript. A process restart or hosting timeout can interrupt it. Before multi-instance production hosting, use a durable queue with per-thread ordering and retries, and review the host’s request/background time limits. Classification is a model’s assessment, not proof that every returned apartment is correct.
+
+**Compatibility note:** ask the coding agent to validate the copied snippet against the installed packages. The supplied AI SDK 7 does not expose `bindTelemetryIntegration`, which the installed `@sanity/context/ai-sdk` helper expects. This completed app therefore uses the documented `client.context.conversations.save` API plus `classifyConversation` from `@sanity/context/insights`, with organization-level configuration. Keep that supported direct-save approach unless the assistant verifies that updated package versions support the Dashboard’s telemetry snippet. [Insights documentation](https://www.sanity.io/docs/ai/sanity-context-insights), [migration guide and direct-save alternative](https://www.sanity.io/docs/ai/context-migration-guide).
+
 ## Troubleshooting
 
 | Symptom                                          | What to check                                                                                                                        |
@@ -572,7 +646,7 @@ All writes use the local Editor token, outside Sanity Context. These scripts do 
 
 ### Context configuration
 
-Configure the agent’s endpoint in Sanity Dashboard as described above. The optional Context Studio plugin is included with Insights disabled; creating a Studio Context document is not a step in this tutorial.
+Configure the agent’s endpoint in Sanity Dashboard as described above. The deprecated Context Studio plugin is not installed in this Studio configuration. Studio edits the catalogue; the organization Context app manages endpoints and Insights.
 
 Use the name **Sanity Context** even if an older plugin or example still says “Agent Context.”
 
@@ -582,9 +656,9 @@ To add a new requirement, update the Studio schema and seed, deploy the schema, 
 
 To improve descriptive ranking, edit the listing prose/features and allow embeddings to refresh. To improve query interpretation, refine the Context domain instructions and application contract, then rerun the natural prompts. Do not compensate for bad retrieval by inventing richer answer text.
 
-**Agent Insights is optional and not enabled here.** The query inspector is this app’s debugging UI. Sanity’s Insights feature adds conversation telemetry and classification for analyzing outcomes and content gaps; it requires separate setup. [Add Insights](https://www.sanity.io/docs/ai/sanity-context-insights)
+**Agent Insights is opt-in.** The completed branch includes the integration; enable it or build it on the starter using the [Dashboard-led steps below](#add-agent-insights). The query inspector shows live tool activity in this app; it is separate from Sanity’s stored conversation analytics.
 
-This repository is a local tutorial, not a deployed production rental service. Before public hosting, add the authentication/abuse controls and usage limits appropriate for your audience. Configure server runtime secrets on your host; never deploy `SANITY_API_WRITE_TOKEN`. Review conversation data sent to the model provider and decide whether any telemetry should be stored. No Agent Insights conversation persistence is configured by this build.
+This repository is a local tutorial, not a deployed production rental service. Before public hosting, add the authentication/abuse controls and usage limits appropriate for your audience. Configure server runtime secrets on your host; never deploy `SANITY_API_WRITE_TOKEN`. Review conversation data sent to the model provider and decide whether any telemetry should be stored. Insights storage is disabled in `.env.example`; enabling it sends chat transcripts to your organization’s Context store and the configured model for classification.
 
 ## Repository map
 
