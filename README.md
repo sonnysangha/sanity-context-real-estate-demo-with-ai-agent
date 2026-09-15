@@ -15,7 +15,7 @@ All apartments, prices, dates, descriptions, and images are fictional tutorial c
 | Your goal                        | Where to go                                                                                           |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | Run the finished app             | [Setup](#setup) on the `main` branch                                                                  |
-| Build the agent yourself         | Complete setup on `codex/starter`, then [implement the agent](#build-the-agent-on-the-starter-branch) |
+| Build the agent yourself         | Complete setup on `tutorial/starter`, then [implement the agent](#build-the-agent-on-the-starter-branch) |
 | Follow the full demonstration    | [Demo walkthrough](#demo-walkthrough)                                                                 |
 | Understand the retrieval         | [Filters, keywords, and meaning](#filters-keywords-and-meaning)                                       |
 | Understand the UI and tool calls | [What happens when you search](#what-happens-when-you-search)                                         |
@@ -73,7 +73,7 @@ cp .env.example .env.local
 To implement the agent during the tutorial, choose the starter **before making changes**:
 
 ```sh
-git switch codex/starter
+git switch tutorial/starter
 ```
 
 The starter already includes the interface, content schemas, seed data, images, and supporting helpers. Its `/api/chat` route intentionally returns **HTTP 501** until you implement it. Environment setup alone does not complete that exercise. Stay on `main` if you want to run the finished demonstration immediately.
@@ -233,7 +233,7 @@ This command does not call your LLM. It checks the Context connection and struct
 
 Open [localhost:3000](http://localhost:3000). You should see **11 homes** before searching. Restart the dev server after changing environment values.
 
-On `main`, proceed to the walkthrough. On `codex/starter`, complete the route below first.
+On `main`, proceed to the walkthrough. On `tutorial/starter`, complete the route below first.
 
 ## Build the agent on the starter branch
 
