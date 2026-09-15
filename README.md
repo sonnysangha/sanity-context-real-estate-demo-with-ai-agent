@@ -196,6 +196,49 @@ Redeploy Studio when you want its hosted editing interface to reflect schema/UI 
 
 ### 5. Create the Context MCP in Sanity Dashboard
 
+There are two jobs here: **prepare the content in your Sanity project**, then **create the connection the apartment agent will use**. You can choose how much of that work you do yourself.
+
+| Approach                           | What you do                                                                                                  | What handles the work                                                                                            |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| **Coding agent — recommended**     | Install the official skills and describe the setup you want. Review the result and complete sign-in prompts. | Your coding assistant uses the available CLI/MCP tools and guides you through Dashboard steps when needed.       |
+| **Dashboard — step by step below** | Choose the dataset, content filter, and instructions yourself.                                               | The Context app saves the endpoint and gives you its URL and connection prompt.                                  |
+| **CLI — content setup**            | Run the supplied setup, schema, and embeddings commands in your terminal.                                    | Sanity CLI prepares the dataset; finish the endpoint in Dashboard or ask your coding agent to help configure it. |
+
+You only need **one endpoint**. These are alternative ways to reach the same setup, not three setups to repeat.
+
+#### Use the installed Sanity skills
+
+If you followed [the recommended setup](#recommended-set-up-with-your-coding-agent), the skills are already installed. Otherwise, run these in the project terminal and select your coding assistant when prompted:
+
+```sh
+pnpm dlx skills add sanity-io/agent-toolkit
+pnpm dlx skills add sanity-io/agent-context
+```
+
+Installing skills gives your assistant Sanity-specific instructions; it does not create an endpoint or grant account access by itself. After installation, paste:
+
+> Use the create-agent-with-sanity-context skill to configure this existing HomeMatch NYC project. Follow the current organization-level Context migration guide. Use my production dataset, deploy its schema if needed, and enable Dataset Embeddings over title, description, and features. Create or reuse a HomeMatch NYC dataset-backed MCP endpoint using the content filter and instructions in this README. Use authenticated Sanity CLI or MCP tools where supported; guide me through the Dashboard steps where they are not. Do not create a Knowledge Base or a legacy sanity.agentContext document. Keep credentials private and explain why each setting is needed. Verify the resulting connection with pnpm context:verify.
+
+Once the endpoint exists, use **Connect agent → Set up with AI → Copy setup prompt** to connect the app, as shown at the top of this README. The skills guide your coding assistant; Sanity Context provides the runtime tools used by the apartment agent. [Sanity skills](https://www.sanity.io/docs/ai/skills), [guided Context setup](https://www.sanity.io/docs/ai/sanity-context-quick-start).
+
+#### Prefer the terminal?
+
+The CLI is already included in this repository: `pnpm exec sanity` runs that installed version. After creating your project and setting its ID in `.env.local`, these are the content-preparation steps from the earlier sections. Run only the steps you have not already completed:
+
+| Command                                                         | Why you run it                                                                                                                               |
+| --------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm exec sanity login`                                        | Authenticates the CLI so it can work with your Sanity account.                                                                               |
+| `pnpm setup:tokens`                                             | Runs this repository’s helper to create project read/import tokens and save them privately.                                                  |
+| `pnpm seed`                                                     | Imports the supplied apartment documents and images.                                                                                         |
+| `pnpm schema:deploy`                                            | Publishes the content model so Context can describe the fields to your agent. It does not upload the apartment documents; seeding does that. |
+| `pnpm exec sanity cors add http://localhost:3000 --credentials` | Lets the embedded Studio authenticate from your local app.                                                                                   |
+
+Next, run [the embeddings command and status check](#7-enable-dataset-embeddings), then create the endpoint using the Dashboard steps below or the coding-agent prompt above. After the endpoint URL and organization token are configured, `pnpm context:verify` checks a real query through that connection.
+
+**CLI limitation to understand:** in the version pinned here, `sanity context create` creates a **Knowledge Base**. It does not create this dataset-backed MCP endpoint. `sanity mcp` configures the separate Sanity MCP integration for your coding assistant. Neither command is a substitute for the endpoint-creation step below. The CLI also has `sanity api` for authenticated requests to documented APIs; use it only with a verified endpoint-management API and payload, rather than guessing a command or creating a legacy Studio configuration document. [Current endpoint setup](https://www.sanity.io/docs/ai/sanity-context-configure-mcp).
+
+#### Create the endpoint in Dashboard
+
 1. Open [Sanity Dashboard](https://www.sanity.io/welcome), select your organization, and open **Context**.
 2. If Context is missing, an organization admin can enable it in **Manage → Apps**.
 3. Create an MCP. Give it a title such as **HomeMatch NYC** and a stable name such as `homematch-nyc`.
@@ -239,16 +282,61 @@ A project Viewer token and an organization Context Viewer token serve different 
 
 ### 7. Enable Dataset Embeddings
 
+A renter might ask for **“a bright place to work from home”**, while a listing says **“large windows”** and describes a desk area. Embeddings let Sanity compare the meaning of that request with the listing’s text, even when the words differ. They are numerical representations used for search; this does not train your chat model on the catalogue.
+
+Run this in your project terminal:
+
 ```sh
 pnpm exec sanity datasets embeddings enable production --projection '{title, description, features}' --wait
+```
+
+**What each part means:**
+
+| Part                                            | Meaning                                                                                                                                                                                                            |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `pnpm exec sanity`                              | Run the Sanity CLI installed in this project.                                                                                                                                                                      |
+| `datasets embeddings enable`                    | Turn on meaning-based search for an existing dataset.                                                                                                                                                              |
+| `production`                                    | The dataset name used by this tutorial. Use your own dataset name if you changed it. The CLI reads the project ID from this project’s configuration.                                                               |
+| `--projection '{title, description, features}'` | Choose which fields Sanity uses to create the searchable representation of each document. A **projection** is just a selection of fields. The quotes keep the braces and spaces together as one terminal argument. |
+| `--wait`                                        | Keep the command running until the initial processing finishes. Without it, processing continues in the background.                                                                                                |
+
+#### Why these three fields?
+
+We chose them because they describe **what the apartment is like**, which is what renters express as preferences. They are field names from our schema, not special names required by Sanity.
+
+| Field         | Example from the supplied data                                                                     | Why include it?                                                                                                                                                                                   |
+| ------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `Foundry Loft 2B`                                                                                  | Adds the listing’s short label and descriptive words such as “Loft.” An exact building-name preference still uses a separate keyword match; embeddings alone are not a reliable exact-name check. |
+| `description` | Foundry’s description mentions exposed brick, generous windows, an open kitchen, and entertaining. | Provides the detail needed to compare preferences such as “industrial character” or “space to host friends.”                                                                                      |
+| `features`    | `Oak floors`, `Large windows`, `Open kitchen`                                                      | Adds concise descriptive details that might not all appear in the main paragraph. This is an array of text in our schema, so it contributes useful language to the search.                        |
+
+We leave out fields such as `monthlyRent`, `bedrooms`, `petsAllowed`, `status`, and `availableFrom` because this demo checks them **exactly in GROQ**. An apartment must actually cost less than $4,500; being semantically similar to “affordable” is not enough. Likewise, `petsAllowed == true` is the check for pets, regardless of what the description sounds like.
+
+For example, with **“two bedrooms under $4,500, with a bright workspace”**:
+
+1. GROQ checks the bedroom count, rent, availability, and any other hard requirements against the structured fields.
+2. Semantic scoring compares “bright workspace” with the selected descriptive text of the eligible homes.
+3. The app can rank those homes by relevance while keeping every eligible result. A strong semantic match cannot rescue an apartment that fails the budget.
+
+**Leaving a field out of this projection does not delete it, hide it from the agent, or stop GROQ from filtering or returning it.** This selection only controls the content used for embeddings. The endpoint’s GROQ filter from step 5 controls which documents the agent can access; it is a separate setting.
+
+Embedding every field is possible, but IDs, asset metadata, and operational fields add material that does not help match these preferences. A focused selection keeps the searchable text relevant and reduces the content Sanity needs to process. If you adapt the app, choose fields that describe what your users search for—for example, a restaurant’s description and cuisine. Do not copy our field names into a schema that uses different names. Projections cannot follow references with `->`; our `neighbourhood` reference is handled in the normal query instead. [How projections control embeddings](https://www.sanity.io/docs/content-lake/dataset-embeddings).
+
+#### Check that it is ready
+
+```sh
 pnpm exec sanity datasets embeddings status production
 ```
 
-Wait until status is `ready`. This projection selects the prose fields relevant to atmosphere, daylight, and workspace; price, date, and amenities remain structured fields.
+Wait until status is `ready`. The command finishing successfully confirms the embeddings setup; it does not, by itself, prove the chat agent has used semantic ranking. Check the actual GROQ in the chat’s tool widget during [the combined-search demo](#demo-walkthrough).
 
-Embeddings update asynchronously after content changes. A newly published rent or status is read directly by the hard filter; it does not need to wait for the descriptive text’s embedding to refresh. `_score` is relative to a query, not a confidence percentage. [Dataset Embeddings](https://www.sanity.io/docs/content-lake/dataset-embeddings)
+Embeddings update asynchronously after content changes. A newly published rent or status is read directly by the hard filter; it does not need to wait for the descriptive text’s embedding to refresh. `_score` is relative to a query, not a confidence percentage. [Dataset Embeddings](https://www.sanity.io/docs/content-lake/dataset-embeddings).
 
-Context advertises semantic support when applicable. If `text::semanticSimilarity()` is missing from the discovered tool description, check readiness and the project’s applicable AI usage allowance. Do not mistake keyword-only retrieval for the full semantic demonstration. [Context text search](https://www.sanity.io/docs/ai/sanity-context-mcp)
+If you prefer your coding assistant to run this step, ask:
+
+> Enable Dataset Embeddings on this project’s production dataset using title, description, and features. Explain why these fields suit our apartment preferences, keep price and amenities as exact GROQ checks, and verify that processing reaches ready. Use the current CLI or documented API; do not change the content or create a Knowledge Base.
+
+Context advertises semantic support when applicable. If `text::semanticSimilarity()` is missing from the discovered tool description, check readiness and the project’s applicable AI usage allowance. Do not mistake keyword-only retrieval for the full semantic demonstration. [Context text search](https://www.sanity.io/docs/ai/sanity-context-mcp).
 
 ### 8. Add a model API key
 
