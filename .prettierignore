@@ -1,0 +1,8 @@
+node_modules
+.next
+dist
+.sanity
+.runtime
+pnpm-lock.yaml
+docs/screenshots
+public/apartments

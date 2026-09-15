@@ -1,0 +1,442 @@
+{
+  "version": "homematch-v1",
+  "neighbourhoods": [
+    {
+      "_id": "homematch-neighbourhood-williamsburg",
+      "_type": "neighbourhood",
+      "name": "Williamsburg",
+      "slug": {
+        "_type": "slug",
+        "current": "williamsburg"
+      },
+      "borough": "Brooklyn"
+    },
+    {
+      "_id": "homematch-neighbourhood-greenpoint",
+      "_type": "neighbourhood",
+      "name": "Greenpoint",
+      "slug": {
+        "_type": "slug",
+        "current": "greenpoint"
+      },
+      "borough": "Brooklyn"
+    },
+    {
+      "_id": "homematch-neighbourhood-long-island-city",
+      "_type": "neighbourhood",
+      "name": "Long Island City",
+      "slug": {
+        "_type": "slug",
+        "current": "long-island-city"
+      },
+      "borough": "Queens"
+    },
+    {
+      "_id": "homematch-neighbourhood-east-village",
+      "_type": "neighbourhood",
+      "name": "East Village",
+      "slug": {
+        "_type": "slug",
+        "current": "east-village"
+      },
+      "borough": "Manhattan"
+    }
+  ],
+  "listings": [
+    {
+      "_id": "homematch-listing-foundry-2b",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Foundry Loft 2B",
+      "slug": {
+        "_type": "slug",
+        "current": "foundry-2b"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 3850,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "squareFeet": 980,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "A thoughtfully restored loft with exposed brick, warm oak flooring, and generous black-framed windows. The open living room has a linen sofa and a compact dining table. An open kitchen makes entertaining easy. Industrial character meets a comfortable everyday layout.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "foundry.png",
+      "imageAlt": "Illustrative interior of Foundry Loft 2B"
+    },
+    {
+      "_id": "homematch-listing-northlight-4a",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Northlight Residence 4A",
+      "slug": {
+        "_type": "slug",
+        "current": "northlight-4a"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 4100,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "squareFeet": 997,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-11-15",
+      "public": true,
+      "description": "Natural light fills this bright corner apartment through tall windows. A dedicated desk alcove beside the window offers a distinct place to work from home, with built-in shelving and room for a full-size monitor. Pale maple floors, an airy living area, and soft neutral furniture keep the space calm and open.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "northlight.png",
+      "imageAlt": "Illustrative interior of Northlight Residence 4A"
+    },
+    {
+      "_id": "homematch-listing-workshop-3c",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "The Workshop 3C",
+      "slug": {
+        "_type": "slug",
+        "current": "workshop-3c"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 4350,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "squareFeet": 1014,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-15",
+      "public": true,
+      "description": "Warm walnut joinery and pale brick give this apartment a tactile architectural character. A separate study nook sits behind a glazed partition, providing a dedicated work area apart from the living room. The lounge has a sand linen sofa, designer lighting, and an accent chair.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "workshop.png",
+      "imageAlt": "Illustrative interior of The Workshop 3C"
+    },
+    {
+      "_id": "homematch-listing-skyline-5d",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Skyline Terrace 5D",
+      "slug": {
+        "_type": "slug",
+        "current": "skyline-5d"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 4850,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "squareFeet": 1031,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "Natural light fills this bright corner apartment through tall windows. A dedicated desk alcove beside the window offers a distinct place to work from home, with built-in shelving and room for a full-size monitor. Pale maple floors, an airy living area, and soft neutral furniture keep the space calm and open.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "skyline-5d.png",
+      "imageAlt": "Illustrative interior of Skyline Terrace 5D"
+    },
+    {
+      "_id": "homematch-listing-brickhouse-2a",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Brickhouse 2A",
+      "slug": {
+        "_type": "slug",
+        "current": "brickhouse-2a"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 3750,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "squareFeet": 1048,
+      "furnished": true,
+      "petsAllowed": false,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "A thoughtfully restored loft with exposed brick, warm oak flooring, and generous black-framed windows. The open living room has a linen sofa and a compact dining table. An open kitchen makes entertaining easy. Industrial character meets a comfortable everyday layout.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "brickhouse-2a.png",
+      "imageAlt": "Illustrative interior of Brickhouse 2A"
+    },
+    {
+      "_id": "homematch-listing-courtyard-1b",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Courtyard Place 1B",
+      "slug": {
+        "_type": "slug",
+        "current": "courtyard-1b"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 3950,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "squareFeet": 1065,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": false,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "Warm walnut joinery and pale brick give this apartment a tactile architectural character. A separate study nook sits behind a glazed partition, providing a dedicated work area apart from the living room. The lounge has a sand linen sofa, designer lighting, and an accent chair.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "courtyard-1b.png",
+      "imageAlt": "Illustrative interior of Courtyard Place 1B"
+    },
+    {
+      "_id": "homematch-listing-foundry-2c",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Foundry Loft 2C",
+      "slug": {
+        "_type": "slug",
+        "current": "foundry-2c"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 3700,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "squareFeet": 1082,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "rented",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "A thoughtfully restored loft with exposed brick, warm oak flooring, and generous black-framed windows. The open living room has a linen sofa and a compact dining table. An open kitchen makes entertaining easy. Industrial character meets a comfortable everyday layout.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "foundry-2c.png",
+      "imageAlt": "Illustrative interior of Foundry Loft 2C"
+    },
+    {
+      "_id": "homematch-listing-northlight-1a",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Northlight Residence 1A",
+      "slug": {
+        "_type": "slug",
+        "current": "northlight-1a"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 3500,
+      "currency": "USD",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "squareFeet": 1099,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "Natural light fills this bright corner apartment through tall windows. A dedicated desk alcove beside the window offers a distinct place to work from home, with built-in shelving and room for a full-size monitor. Pale maple floors, an airy living area, and soft neutral furniture keep the space calm and open.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "northlight-1a.png",
+      "imageAlt": "Illustrative interior of Northlight Residence 1A"
+    },
+    {
+      "_id": "homematch-listing-bedford-3a",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Bedford Rooms 3A",
+      "slug": {
+        "_type": "slug",
+        "current": "bedford-3a"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-williamsburg"
+      },
+      "monthlyRent": 3900,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "squareFeet": 1116,
+      "furnished": false,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "Warm walnut joinery and pale brick give this apartment a tactile architectural character. A separate study nook sits behind a glazed partition, providing a dedicated work area apart from the living room. The lounge has a sand linen sofa, designer lighting, and an accent chair.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "bedford-3a.png",
+      "imageAlt": "Illustrative interior of Bedford Rooms 3A"
+    },
+    {
+      "_id": "homematch-listing-greenpoint-2b",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Greenpoint Studio House 2B",
+      "slug": {
+        "_type": "slug",
+        "current": "greenpoint-2b"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-greenpoint"
+      },
+      "monthlyRent": 4000,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "squareFeet": 1133,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "A thoughtfully restored loft with exposed brick, warm oak flooring, and generous black-framed windows. The open living room has a linen sofa and a compact dining table. An open kitchen makes entertaining easy. Industrial character meets a comfortable everyday layout.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "greenpoint-2b.png",
+      "imageAlt": "Illustrative interior of Greenpoint Studio House 2B"
+    },
+    {
+      "_id": "homematch-listing-queens-4c",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Queens Landing 4C",
+      "slug": {
+        "_type": "slug",
+        "current": "queens-4c"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-long-island-city"
+      },
+      "monthlyRent": 4200,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "squareFeet": 1150,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "Natural light fills this bright corner apartment through tall windows. A dedicated desk alcove beside the window offers a distinct place to work from home, with built-in shelving and room for a full-size monitor. Pale maple floors, an airy living area, and soft neutral furniture keep the space calm and open.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "queens-4c.png",
+      "imageAlt": "Illustrative interior of Queens Landing 4C"
+    },
+    {
+      "_id": "homematch-listing-east-village-2d",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "East Village Preview 2D",
+      "slug": {
+        "_type": "slug",
+        "current": "east-village-2d"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-east-village"
+      },
+      "monthlyRent": 4000,
+      "currency": "USD",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "squareFeet": 1167,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": false,
+      "description": "Warm walnut joinery and pale brick give this apartment a tactile architectural character. A separate study nook sits behind a glazed partition, providing a dedicated work area apart from the living room. The lounge has a sand linen sofa, designer lighting, and an accent chair.",
+      "features": ["Oak floors", "Large windows", "Open kitchen"],
+      "imageFile": "east-village-2d.png",
+      "imageAlt": "Illustrative interior of East Village Preview 2D"
+    },
+    {
+      "_id": "homematch-listing-tompkins-3a",
+      "_type": "listing",
+      "seedVersion": "homematch-v1",
+      "title": "Tompkins House 3A",
+      "slug": {
+        "_type": "slug",
+        "current": "tompkins-3a"
+      },
+      "city": "new-york-city",
+      "neighbourhood": {
+        "_type": "reference",
+        "_ref": "homematch-neighbourhood-east-village"
+      },
+      "monthlyRent": 4900,
+      "currency": "USD",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "squareFeet": 1380,
+      "furnished": true,
+      "petsAllowed": true,
+      "inUnitLaundry": true,
+      "status": "available",
+      "availableFrom": "2026-10-01",
+      "public": true,
+      "description": "A furnished three-bedroom prewar apartment with sage-green walls, original ceiling mouldings, and honey-toned herringbone oak floors. Tall sash windows fill the living room with soft daylight. A navy sofa and leather armchairs create a relaxed lounge, while a walnut dining table seats six. Through an open double doorway, a reading alcove and built-in desk provide a separate place to work from home.",
+      "features": [
+        "Herringbone oak floors",
+        "Large sash windows",
+        "Dedicated desk alcove",
+        "Separate dining area"
+      ],
+      "imageFile": "tompkins-3a.png",
+      "imageAlt": "Illustrative sage-green living and dining room with navy sofa and herringbone oak floor at Tompkins House 3A"
+    }
+  ]
+}

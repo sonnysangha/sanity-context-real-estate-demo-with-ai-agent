@@ -1,0 +1,71 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+.runtime/
+artifacts/private/
+*.tsbuildinfo
+.env.local
+.env.*.local
+!.env.example
+
+/dist/
+
+/.sanity/
+/premium-audit.json
+
+# Local pre-build planning document
+/sanity-context-build-demo.md
+
+# Local creator shooting/recording notes
+/docs/recording-script.md
+/docs/shooting-sheet.md
+
+# Local production notes, audits, and generated reports
+/DESIGN.md
+/UX-CONTRACT.md
+/premium-ui.json
+/docs/verification.md
+/docs/*rehearsal*.json
+/docs/accessibility-*.json
+/docs/image-prompts.json
+/scripts/check-model.ts
+/scripts/rehearse-agent.ts
