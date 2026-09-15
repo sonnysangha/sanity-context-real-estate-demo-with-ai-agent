@@ -4,7 +4,7 @@ Build a custom AI apartment finder with **Next.js, Sanity Context, and the Verce
 
 **[Create your Sanity account through Sonny’s signup link →](https://www.sanity.io/sonny)**
 
-This tutorial is sponsored by Sanity. The link above is Sonny’s affiliate link. Use your own Sanity project and model account when following along.
+This is my link, and I appreciate you using it — it allows me to continue making tutorials like this for absolutely free.
 
 ![HomeMatch NYC apartment finder](docs/screenshots/hero-desktop.png)
 
