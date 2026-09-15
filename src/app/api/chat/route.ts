@@ -1,6 +1,7 @@
 /**
  * HomeMatch NYC — agent integration exercise.
- * Follow README.md, "Build the agent on the starter branch", and compare with main.
+ * Start with README.md: install the official skills, then copy the Dashboard setup prompt.
+ * See "Build the agent on the starter branch" for the contract; compare with main.
  * The UI, content schemas, fixtures, and result contract are already provided.
  */
 export const runtime = "nodejs";
@@ -17,6 +18,9 @@ export async function POST() {
   // 5. Stream status, tool running/completed/error events, results, text, and done/error
   //    as newline-delimited JSON. AgentToolCall powers the live inspector.
   // 6. Close the MCP client and abort upstream work when the viewer stops.
+  // 7. In the separate Insights step, call the supplied recordInsights helper with
+  //    the visible transcript from Next.js after() on successful completion.
+  //    Preserve threadId on follow-ups; enable SANITY_INSIGHTS_ENABLED to opt in.
   return Response.json(
     {
       error:
